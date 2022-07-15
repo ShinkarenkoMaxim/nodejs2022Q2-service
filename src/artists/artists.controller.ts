@@ -27,32 +27,31 @@ export class ArtistsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Invalid user id');
+      throw new BadRequestException('Invalid artist id');
     }
 
-    const user = this.artistsService.findOneById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
+    const artist = this.artistsService.findOneById(id);
+    if (!artist) {
+      throw new NotFoundException('Artist not found');
     }
 
-    return user;
+    return artist;
   }
 
   @Post()
   create(@Body() createArtistDto: CreateArtistDto) {
-    const newUser = this.artistsService.create(createArtistDto);
-    return newUser;
+    return this.artistsService.create(createArtistDto);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Invalid user id');
+      throw new BadRequestException('Invalid artist id');
     }
 
     const artist = this.artistsService.update(id, updateArtistDto);
     if (!artist) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Artist not found');
     }
 
     return artist;
@@ -62,13 +61,13 @@ export class ArtistsController {
   @HttpCode(204)
   delete(@Param('id') id: string) {
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Invalid user id');
+      throw new BadRequestException('Invalid artist id');
     }
 
     const result = this.artistsService.delete(id);
 
     if (!result) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Artist not found');
     }
   }
 }
