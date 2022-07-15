@@ -19,7 +19,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UsersService } from './services/users.service';
 
-@Controller({ path: 'users' })
+@Controller({ path: 'user' })
 export class UsersController {
   constructor(private usersService: UsersService) {}
 

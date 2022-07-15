@@ -15,7 +15,7 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistsService } from './services/artists.service';
 
-@Controller({ path: 'artists' })
+@Controller({ path: 'artist' })
 export class ArtistsController {
   constructor(private artistsService: ArtistsService) {}
 
