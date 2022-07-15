@@ -9,7 +9,7 @@ export class CreateAlbumDto {
   @IsOptional()
   year: number;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   artistId: string;
 }
