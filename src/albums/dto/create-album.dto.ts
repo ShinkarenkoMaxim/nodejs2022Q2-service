@@ -11,5 +11,5 @@ export class CreateAlbumDto {
 
   @IsString()
   @IsOptional()
-  artistId: string;
+  artistId: string | null = null;
 }
