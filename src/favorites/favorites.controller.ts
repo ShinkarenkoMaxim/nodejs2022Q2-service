@@ -8,6 +8,7 @@ import {
   NotFoundException,
   Param,
   Post,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ArtistsService } from 'src/artists/services/artists.service';
 import { FavoritesService } from './services/favorites.service';
@@ -36,7 +37,7 @@ export class FavoritesController {
 
     const artist = this.artistsService.findOneById(id);
     if (!artist) {
-      throw new NotFoundException('Artist not found');
+      throw new UnprocessableEntityException('Artist not found');
     }
 
     this.favoritesService.addToFavourites(id, 'artists');
@@ -52,7 +53,7 @@ export class FavoritesController {
 
     const album = this.albumsService.findOneById(id);
     if (!album) {
-      throw new NotFoundException('Album not found');
+      throw new UnprocessableEntityException('Album not found');
     }
 
     this.favoritesService.addToFavourites(id, 'albums');
@@ -68,7 +69,7 @@ export class FavoritesController {
 
     const track = this.tracksService.findOneById(id);
     if (!track) {
-      throw new NotFoundException('Track not found');
+      throw new UnprocessableEntityException('Track not found');
     }
 
     this.favoritesService.addToFavourites(id, 'tracks');
