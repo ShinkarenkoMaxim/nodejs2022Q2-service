@@ -10,6 +10,7 @@ import {
   BadRequestException,
   HttpCode,
 } from '@nestjs/common';
+import { ArtistsService } from 'src/artists/services/artists.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -17,7 +18,10 @@ import { AlbumsService } from './services/albums.service';
 
 @Controller({ path: 'album' })
 export class AlbumsController {
-  constructor(private albumsService: AlbumsService) {}
+  constructor(
+    private albumsService: AlbumsService,
+    private artistsService: ArtistsService,
+  ) {}
 
   @Get()
   findAll() {
@@ -40,6 +44,17 @@ export class AlbumsController {
 
   @Post()
   create(@Body() createAlbumDto: CreateAlbumDto) {
+    if (createAlbumDto?.artistId) {
+      if (!uuidValidate(createAlbumDto.artistId)) {
+        throw new BadRequestException('Invalid artist id');
+      }
+
+      const artist = this.artistsService.findOneById(createAlbumDto.artistId);
+      if (!artist) {
+        throw new NotFoundException('Artist not found');
+      }
+    }
+
     return this.albumsService.create(createAlbumDto);
   }
 
@@ -47,6 +62,17 @@ export class AlbumsController {
   update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid album id');
+    }
+
+    if (updateAlbumDto?.artistId) {
+      if (!uuidValidate(updateAlbumDto.artistId)) {
+        throw new BadRequestException('Invalid artist id');
+      }
+
+      const artist = this.artistsService.findOneById(updateAlbumDto.artistId);
+      if (!artist) {
+        throw new NotFoundException('Artist not found');
+      }
     }
 
     const album = this.albumsService.update(id, updateAlbumDto);

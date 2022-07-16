@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { InMemoryDBService } from 'src/providers/database/inmemory/inmemory-db.service';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateTrackDto } from '../dto/create-track.dto';
 import { UpdateTrackDto } from '../dto/update-track.dto';
@@ -6,7 +7,7 @@ import { Track } from '../interfaces/track.interface';
 
 @Injectable()
 export class TracksService {
-  private tracks: Track[] = [];
+  constructor(private db: InMemoryDBService) {}
 
   create(createTrackDto: CreateTrackDto): Track {
     const newTrack = {
@@ -14,20 +15,20 @@ export class TracksService {
       ...createTrackDto,
     };
 
-    this.tracks.push(newTrack);
+    this.db.tracks.push(newTrack);
 
     return newTrack;
   }
 
   findAll(): Track[] {
-    return this.tracks;
+    return this.db.tracks;
   }
 
   findOneById(id: string): Track {
     let foundedTrack: Track | null = null;
 
-    for (let i = 0; i < this.tracks.length; i++) {
-      const track = this.tracks[i];
+    for (let i = 0; i < this.db.tracks.length; i++) {
+      const track = this.db.tracks[i];
       if (track.id === id) {
         foundedTrack = track;
         break;
@@ -40,8 +41,8 @@ export class TracksService {
   update(id: string, updateTrackDto: UpdateTrackDto): Track {
     let foundedTrack = null;
 
-    for (let i = 0; i < this.tracks.length; i++) {
-      let track = this.tracks[i];
+    for (let i = 0; i < this.db.tracks.length; i++) {
+      let track = this.db.tracks[i];
       if (track.id === id) {
         track = Object.assign(track, updateTrackDto);
         foundedTrack = track;
@@ -53,13 +54,13 @@ export class TracksService {
   }
 
   delete(id: string): boolean {
-    const trackIdx = this.tracks.findIndex((track) => track.id === id);
+    const trackIdx = this.db.tracks.findIndex((track) => track.id === id);
 
     if (trackIdx === -1) {
       return false;
     }
 
-    this.tracks.splice(trackIdx, 1);
+    this.db.tracks.splice(trackIdx, 1);
 
     return true;
   }
