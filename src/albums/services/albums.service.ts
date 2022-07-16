@@ -65,4 +65,15 @@ export class AlbumsService {
 
     return true;
   }
+
+  removeArtistReferencesIfExist(artistId: string): void {
+    for (let i = 0; i < this.db.albums.length; i++) {
+      const album = this.db.albums[i];
+      if (album.artistId === artistId) {
+        album.artistId = null;
+      }
+    }
+
+    return;
+  }
 }

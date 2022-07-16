@@ -64,4 +64,26 @@ export class TracksService {
 
     return true;
   }
+
+  removeArtistReferencesIfExist(artistId: string): void {
+    for (let i = 0; i < this.db.tracks.length; i++) {
+      const track = this.db.tracks[i];
+      if (track.artistId === artistId) {
+        track.artistId = null;
+      }
+    }
+
+    return;
+  }
+
+  removeAlbumReferencesIfExist(albumId: string): void {
+    for (let i = 0; i < this.db.tracks.length; i++) {
+      const track = this.db.tracks[i];
+      if (track.albumId === albumId) {
+        track.albumId = null;
+      }
+    }
+
+    return;
+  }
 }

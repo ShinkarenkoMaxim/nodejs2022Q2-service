@@ -11,6 +11,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { ArtistsService } from 'src/artists/services/artists.service';
+import { TracksService } from 'src/tracks/services/tracks.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -21,6 +22,7 @@ export class AlbumsController {
   constructor(
     private albumsService: AlbumsService,
     private artistsService: ArtistsService,
+    private tracksService: TracksService,
   ) {}
 
   @Get()
@@ -91,6 +93,8 @@ export class AlbumsController {
     }
 
     const result = this.albumsService.delete(id);
+
+    this.tracksService.removeAlbumReferencesIfExist(id);
 
     if (!result) {
       throw new NotFoundException('Album not found');

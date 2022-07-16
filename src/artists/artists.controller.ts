@@ -10,6 +10,8 @@ import {
   BadRequestException,
   HttpCode,
 } from '@nestjs/common';
+import { AlbumsService } from 'src/albums/services/albums.service';
+import { TracksService } from 'src/tracks/services/tracks.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -17,7 +19,11 @@ import { ArtistsService } from './services/artists.service';
 
 @Controller({ path: 'artist' })
 export class ArtistsController {
-  constructor(private artistsService: ArtistsService) {}
+  constructor(
+    private artistsService: ArtistsService,
+    private albumsService: AlbumsService,
+    private tracksService: TracksService,
+  ) {}
 
   @Get()
   findAll() {
@@ -65,6 +71,9 @@ export class ArtistsController {
     }
 
     const result = this.artistsService.delete(id);
+
+    this.albumsService.removeArtistReferencesIfExist(id);
+    this.tracksService.removeArtistReferencesIfExist(id);
 
     if (!result) {
       throw new NotFoundException('Artist not found');
