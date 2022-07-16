@@ -1,0 +1,639 @@
+{
+	"info": {
+		"_postman_id": "772b1f21-46ce-40e1-8dbc-164bb2bafaef",
+		"name": "nodejs 2022Q2 service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users_url}}",
+							"host": [
+								"{{users_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"max\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users_url}}",
+							"host": [
+								"{{users_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users_url}}/:id",
+							"host": [
+								"{{users_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fdeb733a-410d-4884-b3c5-f1c0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update pasword",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"test\",\n    \"newPassword\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users_url}}/:id",
+							"host": [
+								"{{users_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "851aa986-fa8c-4d5f-9d7f-8d1fd62f475e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{users_url}}/:id",
+							"host": [
+								"{{users_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Artists",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{artists_url}}",
+							"host": [
+								"{{artists_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{artists_url}}/:id",
+							"host": [
+								"{{artists_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "75de6a32-5fd7-40d2-a962-9bf4406ee6e4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{artists_url}}",
+							"host": [
+								"{{artists_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{artists_url}}/:id",
+							"host": [
+								"{{artists_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "12360d2c-0719-4d6a-b87a-8bbe70d0200c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{artists_url}}/:id",
+							"host": [
+								"{{artists_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6710ba74-cee1-456a-ad4d-467b7a8a1ba6"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{albums_url}}",
+							"host": [
+								"{{albums_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{albums_url}}/:id",
+							"host": [
+								"{{albums_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "300cd8e6-103a-4a56-9876-bcf3d3e15dcc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test\",\n    \"year\": 2000,\n    \"artistId\": \"2314234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{albums_url}}",
+							"host": [
+								"{{albums_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{albums_url}}/:id",
+							"host": [
+								"{{albums_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "300cd8e6-103a-4a56-9876-bcf3d3e15dcc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{albums_url}}/:id",
+							"host": [
+								"{{albums_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a41f9bd6-b720-4d70-b7fc-3e6ab472c093"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracks",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tracks_url}}",
+							"host": [
+								"{{tracks_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tracks_url}}/:id",
+							"host": [
+								"{{tracks_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"t\",\n    \"artistId\": \"34234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{tracks_url}}",
+							"host": [
+								"{{tracks_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"artistId\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{tracks_url}}/:id",
+							"host": [
+								"{{tracks_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "669e3dbf-6699-4e4c-916d-d9610dcbaba6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{tracks_url}}/:id",
+							"host": [
+								"{{tracks_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "33b5543b-8091-498e-99bb-d9ea6f7c89d3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{favorites_url}}",
+							"host": [
+								"{{favorites_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add artist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{favorites_url}}/artist/:id",
+							"host": [
+								"{{favorites_url}}"
+							],
+							"path": [
+								"artist",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a0b86dc7-a1cb-4cc6-acd3-efd6cd3f519c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add album",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{favorites_url}}/album/:id",
+							"host": [
+								"{{favorites_url}}"
+							],
+							"path": [
+								"album",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "ced6064d-f921-44ba-90fb-04abecb5cae4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add track",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{favorites_url}}/track/:id",
+							"host": [
+								"{{favorites_url}}"
+							],
+							"path": [
+								"track",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove artist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{favorites_url}}/artist/:id",
+							"host": [
+								"{{favorites_url}}"
+							],
+							"path": [
+								"artist",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "21d0ba04-d6fd-496f-9a1e-6ac0c7fd744f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove album",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{favorites_url}}/album/:id",
+							"host": [
+								"{{favorites_url}}"
+							],
+							"path": [
+								"album",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove track",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
