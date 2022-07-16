@@ -69,7 +69,10 @@ export class UsersService {
         return { record: user, successfullyUpdated: false };
       }
 
+      const timestamp = new Date().getTime();
+
       user.password = passwordMatch.newPassword;
+      user.updatedAt = timestamp;
       user.version++;
 
       return {
