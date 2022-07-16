@@ -11,8 +11,7 @@ import {
   ForbiddenException,
   HttpCode,
 } from '@nestjs/common';
-import { AlbumsService } from 'src/albums/services/albums.service';
-import { ArtistsService } from 'src/artists/services/artists.service';
+import { FavoritesService } from 'src/favorites/services/favorites.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
@@ -22,8 +21,7 @@ import { TracksService } from './services/tracks.service';
 export class TracksController {
   constructor(
     private tracksService: TracksService,
-    private artistsService: ArtistsService,
-    private albumsService: AlbumsService,
+    private favoritesService: FavoritesService,
   ) {}
 
   @Get()
@@ -89,6 +87,8 @@ export class TracksController {
     }
 
     const result = this.tracksService.delete(id);
+
+    this.favoritesService.removeFromFavourites(id, 'tracks');
 
     if (!result) {
       throw new NotFoundException('Track not found');

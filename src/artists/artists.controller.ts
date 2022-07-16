@@ -11,6 +11,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { AlbumsService } from 'src/albums/services/albums.service';
+import { FavoritesService } from 'src/favorites/services/favorites.service';
 import { TracksService } from 'src/tracks/services/tracks.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -23,6 +24,7 @@ export class ArtistsController {
     private artistsService: ArtistsService,
     private albumsService: AlbumsService,
     private tracksService: TracksService,
+    private favoritesService: FavoritesService,
   ) {}
 
   @Get()
@@ -74,6 +76,7 @@ export class ArtistsController {
 
     this.albumsService.removeArtistReferencesIfExist(id);
     this.tracksService.removeArtistReferencesIfExist(id);
+    this.favoritesService.removeFromFavourites(id, 'artists');
 
     if (!result) {
       throw new NotFoundException('Artist not found');

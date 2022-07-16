@@ -4,9 +4,16 @@ import { InMemoryDBService } from 'src/providers/database/inmemory/inmemory-db.s
 import { TracksService } from 'src/tracks/services/tracks.service';
 import { ArtistsController } from './artists.controller';
 import { ArtistsService } from './services/artists.service';
+import { FavoritesService } from 'src/favorites/services/favorites.service';
 
 @Module({
   controllers: [ArtistsController],
-  providers: [ArtistsService, AlbumsService, TracksService, InMemoryDBService],
+  providers: [
+    ArtistsService,
+    AlbumsService,
+    TracksService,
+    FavoritesService,
+    InMemoryDBService,
+  ],
 })
 export class ArtistsModule {}
