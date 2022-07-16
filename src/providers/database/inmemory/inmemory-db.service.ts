@@ -10,6 +10,11 @@ export class InMemoryDBService {
   artists: Artist[] = [];
   tracks: Track[] = [];
   users: User[] = [];
+  favorites = {
+    artists: [],
+    albums: [],
+    tracks: [],
+  };
 
   private static _instance: InMemoryDBService;
 
