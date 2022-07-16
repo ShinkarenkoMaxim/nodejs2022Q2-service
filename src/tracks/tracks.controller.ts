@@ -47,26 +47,12 @@ export class TracksController {
 
   @Post()
   create(@Body() createTrackDto: CreateTrackDto) {
-    if (createTrackDto?.artistId) {
-      if (!uuidValidate(createTrackDto.artistId)) {
-        throw new BadRequestException('Invalid artist id');
-      }
-
-      const artist = this.artistsService.findOneById(createTrackDto.artistId);
-      if (!artist) {
-        throw new NotFoundException('Artist not found');
-      }
+    if (createTrackDto?.artistId && !uuidValidate(createTrackDto?.artistId)) {
+      throw new BadRequestException('Invalid artist id');
     }
 
-    if (createTrackDto?.albumId) {
-      if (!uuidValidate(createTrackDto.albumId)) {
-        throw new BadRequestException('Invalid album id');
-      }
-
-      const artist = this.artistsService.findOneById(createTrackDto.albumId);
-      if (!artist) {
-        throw new NotFoundException('Album not found');
-      }
+    if (createTrackDto?.albumId && !uuidValidate(createTrackDto?.albumId)) {
+      throw new BadRequestException('Invalid album id');
     }
 
     return this.tracksService.create(createTrackDto);
@@ -78,26 +64,12 @@ export class TracksController {
       throw new BadRequestException('Invalid track id');
     }
 
-    if (updateTrackDto?.artistId) {
-      if (!uuidValidate(updateTrackDto.artistId)) {
-        throw new BadRequestException('Invalid artist id');
-      }
-
-      const artist = this.albumsService.findOneById(updateTrackDto.artistId);
-      if (!artist) {
-        throw new NotFoundException('Artist not found');
-      }
+    if (updateTrackDto?.artistId && !uuidValidate(updateTrackDto?.artistId)) {
+      throw new BadRequestException('Invalid artist id');
     }
 
-    if (updateTrackDto?.albumId) {
-      if (!uuidValidate(updateTrackDto.albumId)) {
-        throw new BadRequestException('Invalid album id');
-      }
-
-      const artist = this.albumsService.findOneById(updateTrackDto.albumId);
-      if (!artist) {
-        throw new NotFoundException('Album not found');
-      }
+    if (updateTrackDto?.albumId && !uuidValidate(updateTrackDto?.albumId)) {
+      throw new BadRequestException('Invalid album id');
     }
 
     const track = this.tracksService.update(id, updateTrackDto);
