@@ -1,5 +1,24 @@
 # Home Library Service
 
+## Docker
+
+You can download image from docker hub
+```
+docker pull shinkarenkomax97/nodejs2022q2-service_app
+```
+
+Compose image
+```
+docker compose -f "docker-compose.yaml" up --build
+```
+
+Scan vulnerablities
+```
+npm run scan
+```
+
+All `Dockerfile`s provided in **docker/** directory
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
