@@ -11,8 +11,8 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { ArtistsService } from 'src/artists/services/artists.service';
-import { FavoritesService } from 'src/favorites/services/favorites.service';
-import { TracksService } from 'src/tracks/services/tracks.service';
+// import { FavoritesService } from 'src/favorites/services/favorites.service';
+// import { TracksService } from 'src/tracks/services/tracks.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -23,9 +23,9 @@ export class AlbumsController {
   constructor(
     private albumsService: AlbumsService,
     private artistsService: ArtistsService,
-    private tracksService: TracksService,
-    private favoritesService: FavoritesService,
-  ) {}
+  ) // private tracksService: TracksService,
+  // private favoritesService: FavoritesService,
+  {}
 
   @Get()
   findAll() {
@@ -33,12 +33,12 @@ export class AlbumsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid album id');
     }
 
-    const album = this.albumsService.findOneById(id);
+    const album = await this.albumsService.findOneById(id);
     if (!album) {
       throw new NotFoundException('Album not found');
     }
@@ -47,13 +47,15 @@ export class AlbumsController {
   }
 
   @Post()
-  create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
     if (createAlbumDto?.artistId) {
       if (!uuidValidate(createAlbumDto.artistId)) {
         throw new BadRequestException('Invalid artist id');
       }
 
-      const artist = this.artistsService.findOneById(createAlbumDto.artistId);
+      const artist = await this.artistsService.findOneById(
+        createAlbumDto.artistId,
+      );
       if (!artist) {
         throw new NotFoundException('Artist not found');
       }
@@ -63,7 +65,10 @@ export class AlbumsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateAlbumDto: UpdateAlbumDto,
+  ) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid album id');
     }
@@ -73,13 +78,15 @@ export class AlbumsController {
         throw new BadRequestException('Invalid artist id');
       }
 
-      const artist = this.artistsService.findOneById(updateAlbumDto.artistId);
+      const artist = await this.artistsService.findOneById(
+        updateAlbumDto.artistId,
+      );
       if (!artist) {
         throw new NotFoundException('Artist not found');
       }
     }
 
-    const album = this.albumsService.update(id, updateAlbumDto);
+    const album = await this.albumsService.update(id, updateAlbumDto);
     if (!album) {
       throw new NotFoundException('Album not found');
     }
@@ -89,15 +96,15 @@ export class AlbumsController {
 
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid album id');
     }
 
-    const result = this.albumsService.delete(id);
+    const result = await this.albumsService.delete(id);
 
-    this.tracksService.removeAlbumReferencesIfExist(id);
-    this.favoritesService.removeFromFavourites(id, 'albums');
+    // this.tracksService.removeAlbumReferencesIfExist(id);
+    // this.favoritesService.removeFromFavourites(id, 'albums');
 
     if (!result) {
       throw new NotFoundException('Album not found');

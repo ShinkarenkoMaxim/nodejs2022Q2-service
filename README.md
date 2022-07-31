@@ -1,5 +1,37 @@
 # Home Library Service
 
+## Docker
+
+You can download image from docker hub
+```
+docker pull shinkarenkomax97/nodejs2022q2-service_app
+```
+
+Compose image
+```
+docker compose -f "docker-compose.yaml" up --build
+```
+
+Scan vulnerablities
+```
+npm run scan
+```
+
+All `Dockerfile`s provided in **docker/** directory
+
+Also you should to provide env variables to `.env` file
+
+For example
+```
+PORT=4000
+PG_HOST_PORT=5434
+PG_CONTAINER_PORT=5432
+
+PG_DB=nodejs2022q2
+PG_USER=test
+PG_PASSWORD=test
+```
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).

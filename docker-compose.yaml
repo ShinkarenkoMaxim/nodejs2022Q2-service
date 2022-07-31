@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${PG_USER}:${PG_PASSWORD}@postgres:${PG_CONTAINER_PORT}/${PG_DB}?schema=public
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
+    networks:
+      - nodejs2022q2-network
+    restart: on-failure:3
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    environment:
+      POSTGRES_PORT: ${PG_CONTAINER_PORT}
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - ${PG_HOST_PORT}:${PG_CONTAINER_PORT}
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    networks:
+      - nodejs2022q2-network
+    restart: on-failure:3
+
+volumes:
+  postgres-volume:
+    name: postgres-volume
+
+networks:
+  nodejs2022q2-network:
+    name: nodejs2022q2-network
+    driver: bridge

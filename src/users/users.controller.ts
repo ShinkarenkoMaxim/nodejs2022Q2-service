@@ -29,12 +29,12 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid user id');
     }
 
-    const user = this.usersService.findOneById(id);
+    const user = await this.usersService.findOneById(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -43,13 +43,13 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
-    const newUser = this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    const newUser = await this.usersService.create(createUserDto);
     return res.status(HttpStatus.CREATED).send(newUser);
   }
 
   @Put(':id')
-  updatePassword(
+  async updatePassword(
     @Param('id') id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
@@ -57,10 +57,8 @@ export class UsersController {
       throw new BadRequestException('Invalid user id');
     }
 
-    const { record, successfullyUpdated } = this.usersService.updatePassword(
-      id,
-      updatePasswordDto,
-    );
+    const { record, successfullyUpdated } =
+      await this.usersService.updatePassword(id, updatePasswordDto);
 
     if (!record) {
       throw new NotFoundException('User not found');
@@ -75,12 +73,12 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid user id');
     }
 
-    const result = this.usersService.delete(id);
+    const result = await this.usersService.delete(id);
 
     if (!result) {
       throw new NotFoundException('User not found');
