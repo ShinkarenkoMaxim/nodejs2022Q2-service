@@ -1,82 +1,69 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { v4 as uuidv4 } from 'uuid';
-import { User } from '../interfaces/user.interface';
 import { UpdatePasswordDto } from '../dto/update-password.dto';
+import { PrismaService } from 'src/providers/database/prisma/prisma.service';
 
 type UpdatePasswordResult = {
-  record: Omit<User, 'password'> | null;
+  record: any;
   successfullyUpdated: boolean;
 };
 
-function omitPassword({
-  id,
-  login,
-  version,
-  createdAt,
-  updatedAt,
-}): Omit<User, 'password'> {
-  return { id, login, version, createdAt, updatedAt };
-}
+const availableFieldsToSelect = {
+  id: true,
+  login: true,
+  version: true,
+  createdAt: true,
+  updatedAt: true,
+};
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto): Omit<User, 'password'> {
-    const timestamp = new Date().getTime();
-    const { login, password } = createUserDto;
-    const newUser = {
-      id: uuidv4(),
-      login,
-      version: 1,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    };
-
-    this.users.push({ ...newUser, password });
-
-    return newUser;
+  create(createUserDto: CreateUserDto) {
+    return this.prisma.user.create({
+      data: { ...createUserDto },
+      select: availableFieldsToSelect,
+    });
   }
 
-  findAll(): Omit<User, 'password'>[] {
-    const users = this.users.map((user) => omitPassword(user));
-    return users;
+  findAll() {
+    return this.prisma.user.findMany({
+      select: availableFieldsToSelect,
+    });
   }
 
-  findOneById(id: string): Omit<User, 'password'> {
-    let foundedUser: Omit<User, 'password'> | null = null;
-
-    for (let i = 0; i < this.users.length; i++) {
-      const user = this.users[i];
-      if (user.id === id) {
-        foundedUser = omitPassword(user);
-        break;
-      }
-    }
-
-    return foundedUser;
+  findOneById(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: availableFieldsToSelect,
+    });
   }
 
-  updatePassword(
+  async updatePassword(
     id: string,
     passwordMatch: UpdatePasswordDto,
-  ): UpdatePasswordResult {
-    const user = this.users.find((user) => user.id === id);
+  ): Promise<UpdatePasswordResult> {
+    let user = await this.prisma.user.findUnique({ where: { id } });
 
     if (user) {
       if (user.password !== passwordMatch.oldPassword) {
         return { record: user, successfullyUpdated: false };
       }
 
-      const timestamp = new Date().getTime();
+      const updatedUser = {
+        password: passwordMatch.newPassword,
+        updatedAt: new Date(),
+        version: user.version + 1,
+      };
 
-      user.password = passwordMatch.newPassword;
-      user.updatedAt = timestamp;
-      user.version++;
+      user = await this.prisma.user.update({
+        where: { id },
+        data: updatedUser,
+      });
 
       return {
-        record: omitPassword(user),
+        record: user,
         successfullyUpdated: true,
       };
     } else {
@@ -84,15 +71,7 @@ export class UsersService {
     }
   }
 
-  delete(id: string): boolean {
-    const userIdx = this.users.findIndex((user) => user.id === id);
-
-    if (userIdx === -1) {
-      return false;
-    }
-
-    this.users.splice(userIdx, 1);
-
-    return true;
+  delete(id: string) {
+    return this.prisma.user.delete({ where: { id } });
   }
 }
