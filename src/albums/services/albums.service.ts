@@ -1,79 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { InMemoryDBService } from 'src/providers/database/inmemory/inmemory-db.service';
-import { v4 as uuidv4 } from 'uuid';
+import { PrismaService } from 'src/providers/database/prisma/prisma.service';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { UpdateAlbumDto } from '../dto/update-album.dto';
 import { Album } from '../interfaces/album.interface';
 
 @Injectable()
 export class AlbumsService {
-  constructor(private db: InMemoryDBService) {}
+  constructor(private prisma: PrismaService) {}
 
-  create(createAlbumDto: CreateAlbumDto): Album {
-    const newAlbum = {
-      id: uuidv4(),
-      ...createAlbumDto,
-    };
-
-    this.db.albums.push(newAlbum);
-
-    return newAlbum;
+  create(createAlbumDto: CreateAlbumDto): Promise<Album> {
+    return this.prisma.album.create({
+      data: {
+        ...createAlbumDto,
+      },
+    });
   }
 
-  findAll(): Album[] {
-    return this.db.albums;
+  findAll(): Promise<Album[]> {
+    return this.prisma.album.findMany();
   }
 
-  findOneById(id: string): Album {
-    let foundedAlbum: Album | null = null;
-
-    for (let i = 0; i < this.db.albums.length; i++) {
-      const album = this.db.albums[i];
-      if (album.id === id) {
-        foundedAlbum = album;
-        break;
-      }
-    }
-
-    return foundedAlbum;
+  findOneById(id: string): Promise<Album> {
+    return this.prisma.album.findUnique({ where: { id } });
   }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto): Album {
-    let foundedAlbum = null;
-
-    for (let i = 0; i < this.db.albums.length; i++) {
-      let album = this.db.albums[i];
-
-      if (album.id === id) {
-        album = Object.assign(album, updateAlbumDto);
-        foundedAlbum = album;
-        break;
-      }
-    }
-
-    return foundedAlbum;
+  update(id: string, updateAlbumDto: UpdateAlbumDto): Promise<Album> {
+    return this.prisma.album.update({
+      where: { id },
+      data: { ...updateAlbumDto },
+    });
   }
 
-  delete(id: string): boolean {
-    const albumIdx = this.db.albums.findIndex((album) => album.id === id);
-
-    if (albumIdx === -1) {
-      return false;
-    }
-
-    this.db.albums.splice(albumIdx, 1);
-
-    return true;
-  }
-
-  removeArtistReferencesIfExist(artistId: string): void {
-    for (let i = 0; i < this.db.albums.length; i++) {
-      const album = this.db.albums[i];
-      if (album.artistId === artistId) {
-        album.artistId = null;
-      }
-    }
-
-    return;
+  async delete(id: string): Promise<Album> {
+    return this.prisma.album.delete({ where: { id } });
   }
 }
