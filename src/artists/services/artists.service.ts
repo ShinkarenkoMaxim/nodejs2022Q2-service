@@ -1,68 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { InMemoryDBService } from 'src/providers/database/inmemory/inmemory-db.service';
-import { v4 as uuidv4 } from 'uuid';
+import { PrismaService } from 'src/providers/database/prisma/prisma.service';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
 import { Artist } from '../interfaces/artist.interface';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private db: InMemoryDBService) {}
+  constructor(private prisma: PrismaService) {}
 
-  create(createArtistDto: CreateArtistDto): Artist {
-    const newArtist = {
-      id: uuidv4(),
-      ...createArtistDto,
-    };
-
-    this.db.artists.push(newArtist);
-
-    return newArtist;
+  create(createArtistDto: CreateArtistDto): Promise<Artist> {
+    return this.prisma.artist.create({ data: createArtistDto });
   }
 
-  findAll(): Artist[] {
-    return this.db.artists;
+  findAll(): Promise<Artist[]> {
+    return this.prisma.artist.findMany();
   }
 
-  findOneById(id: string): Artist {
-    let foundedArtist: Artist | null = null;
-
-    for (let i = 0; i < this.db.artists.length; i++) {
-      const artist = this.db.artists[i];
-      if (artist.id === id) {
-        foundedArtist = artist;
-        break;
-      }
-    }
-
-    return foundedArtist;
+  findOneById(id: string): Promise<Artist> {
+    return this.prisma.artist.findUnique({ where: { id } });
   }
 
-  update(id: string, updateArtistDto: UpdateArtistDto): Artist {
-    let foundedArtist = null;
-
-    for (let i = 0; i < this.db.artists.length; i++) {
-      let artist = this.db.artists[i];
-
-      if (artist.id === id) {
-        artist = Object.assign(artist, updateArtistDto);
-        foundedArtist = artist;
-        break;
-      }
-    }
-
-    return foundedArtist;
+  update(id: string, updateArtistDto: UpdateArtistDto): Promise<Artist> {
+    return this.prisma.artist.update({
+      where: { id },
+      data: { ...updateArtistDto },
+    });
   }
 
-  delete(id: string): boolean {
-    const artistIdx = this.db.artists.findIndex((artist) => artist.id === id);
-
-    if (artistIdx === -1) {
-      return false;
-    }
-
-    this.db.artists.splice(artistIdx, 1);
-
-    return true;
+  delete(id: string): Promise<Artist> {
+    return this.prisma.artist.delete({ where: { id } });
   }
 }
