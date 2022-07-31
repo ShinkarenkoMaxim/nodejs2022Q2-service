@@ -11,7 +11,7 @@ import {
   ForbiddenException,
   HttpCode,
 } from '@nestjs/common';
-import { FavoritesService } from 'src/favorites/services/favorites.service';
+// import { FavoritesService } from 'src/favorites/services/favorites.service';
 import { validate as uuidValidate } from 'uuid';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
@@ -20,8 +20,7 @@ import { TracksService } from './services/tracks.service';
 @Controller({ path: 'track' })
 export class TracksController {
   constructor(
-    private tracksService: TracksService,
-    private favoritesService: FavoritesService,
+    private tracksService: TracksService, // private favoritesService: FavoritesService,
   ) {}
 
   @Get()
@@ -30,12 +29,12 @@ export class TracksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid track id');
     }
 
-    const track = this.tracksService.findOneById(id);
+    const track = await this.tracksService.findOneById(id);
     if (!track) {
       throw new NotFoundException('Track not found');
     }
@@ -57,7 +56,10 @@ export class TracksController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid track id');
     }
@@ -70,7 +72,7 @@ export class TracksController {
       throw new BadRequestException('Invalid album id');
     }
 
-    const track = this.tracksService.update(id, updateTrackDto);
+    const track = await this.tracksService.update(id, updateTrackDto);
 
     if (!track) {
       throw new NotFoundException('Track not found');
@@ -81,14 +83,14 @@ export class TracksController {
 
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     if (!uuidValidate(id)) {
       throw new BadRequestException('Invalid track id');
     }
 
-    const result = this.tracksService.delete(id);
+    const result = await this.tracksService.delete(id);
 
-    this.favoritesService.removeFromFavourites(id, 'tracks');
+    // this.favoritesService.removeFromFavourites(id, 'tracks');
 
     if (!result) {
       throw new NotFoundException('Track not found');
